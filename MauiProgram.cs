@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TaskNoter.Data;
 
 namespace TaskNoter
 {
@@ -15,6 +16,7 @@ namespace TaskNoter
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<DBService>();
             builder.Services.AddTransient<MainPage>();
 
 #if DEBUG

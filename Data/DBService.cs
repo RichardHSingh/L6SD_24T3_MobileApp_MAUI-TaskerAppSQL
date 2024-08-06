@@ -1,10 +1,12 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using SQLite;
+using TaskNoter.MVVM.Models;
+
 
 namespace TaskNoter.Data
 {
@@ -18,31 +20,80 @@ namespace TaskNoter.Data
         public DBService()
         {
             _database = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_Name));
-            _database.CreateTableAsync<DBTaskItems>().Wait();
+
+            // Initialise tables Cat and Task
+            InitializeDBTables();
+        }
+
+        private async Task InitializeDBTables()
+        {
+            await _database.CreateTableAsync<MyTask>();
+            await _database.CreateTableAsync<Category>();
+           
+        }
+
+        // ================================================================ 
+        // ======================== CRUD FOR TASKS ========================
+        // ================================================================
+        public async Task<List<DBTaskItems>> GetTask()
+        {
+            return await _database.Table<DBTaskItems>().ToListAsync();
         }
 
 
-        public Task<List<DBTaskItems>> GetTaskAsync()
+        public async Task<DBTaskItems> GeTaskById(int id)
         {
-            return _database.Table<DBTaskItems>().ToListAsync();
+            return await _database.Table<DBTaskItems>().Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task CreateTask(DBTaskItems task)
+        {
+            await _database.InsertAsync(task);
+        }
+
+        public async Task UpdateTask(DBTaskItems task)
+        {
+            await _database.UpdateAsync(task);
+
+        }
+
+        public async Task DeleteTask(DBTaskItems task)
+        {
+            await _database.DeleteAsync(task);
+
+        }
+
+        // =================================================================== 
+        // ======================== CRUD FOR CATEGORY ========================
+        // ===================================================================
+
+        public async Task<List<Category>> GetCategory()
+        {
+            return await _database.Table<Category>().ToListAsync();
         }
 
 
-        public Task<int> SaveTaskAsync(DBTaskItems task)
+        public async Task<Category> GetCategoryById(int id)
         {
-            if (task.Id != 0)
-            {
-                return _database.UpdateAsync(task);
-            }
-            else
-            {
-                return _database.InsertAsync(task);
-            }
+            return await _database.Table<Category>().Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task CreateCategory(Category category)
+        {
+            await _database.InsertAsync(category);
+        }
+
+        public async Task UpdateCategory(Category category)
+        {
+            await _database.UpdateAsync(category);
 
         }
-        public Task<int> DeleteTaskAsync(DBTaskItems task)
+
+        public async Task DeleteCategory(Category category)
         {
-            return _database.DeleteAsync(task);
+            await _database.DeleteAsync(category);
+
         }
     }
+
 }

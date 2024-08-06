@@ -7,7 +7,7 @@ using SQLite;
 
 namespace TaskNoter.Data
 {
-    [Table("Task_Noter")]
+    [Table("TaskNoter")]
     public class DBTaskItems
     {
         [PrimaryKey, AutoIncrement]
@@ -16,10 +16,10 @@ namespace TaskNoter.Data
         public int Id { get; set; }
 
         [Column("Task_Name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Column("Task_Description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Column("Completion")]
         public bool IsCompleted { get; set; }
