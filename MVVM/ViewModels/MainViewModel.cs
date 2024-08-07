@@ -72,7 +72,7 @@ namespace TaskNoter.MVVM.ViewModels
 
 
                 c.PendingTasks = notCompleted.Count();
-                c.Percentage = (float)completed.Count() / (float)tasks.Count();
+                c.Percentage = tasks.Any() ? (float)completed.Count() / tasks.Count() : 0;
             }
 
             foreach (var t in Tasks)
@@ -81,7 +81,7 @@ namespace TaskNoter.MVVM.ViewModels
                     (from c in Categories
                      where c.Id == t.CategoryId
                      select c.Color).FirstOrDefault();
-                t.TaskColor = categoryColour;
+                t.TaskColor = categoryColour ?? "defaultColor";
             }
         } 
     }

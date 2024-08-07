@@ -12,6 +12,7 @@ namespace TaskNoter.Data
 {
     public class DBService
     {
+        // giving name to my db
         private const string DB_Name = "TaskNoter_DB.db3";
 
         private readonly SQLiteAsyncConnection _database;
@@ -41,23 +42,23 @@ namespace TaskNoter.Data
         }
 
 
-        public async Task<DBTaskItems> GeTaskById(int id)
+        public async Task<MyTask> GeTaskById(int id)
         {
-            return await _database.Table<DBTaskItems>().Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _database.Table<MyTask>().Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task CreateTask(DBTaskItems task)
+        public async Task CreateTask(MyTask task)
         {
             await _database.InsertAsync(task);
         }
 
-        public async Task UpdateTask(DBTaskItems task)
+        public async Task UpdateTask(MyTask task)
         {
             await _database.UpdateAsync(task);
 
         }
 
-        public async Task DeleteTask(DBTaskItems task)
+        public async Task DeleteTask(MyTask task)
         {
             await _database.DeleteAsync(task);
 

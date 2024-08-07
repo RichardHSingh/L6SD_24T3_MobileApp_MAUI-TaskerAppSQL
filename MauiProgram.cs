@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using TaskNoter.Data;
+using TaskNoter.MVVM.Views;
 
 namespace TaskNoter
 {
@@ -17,7 +18,7 @@ namespace TaskNoter
                 });
 
             builder.Services.AddSingleton<DBService>();
-            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<LandingPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

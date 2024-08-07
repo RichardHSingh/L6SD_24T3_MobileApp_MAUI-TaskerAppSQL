@@ -1,14 +1,24 @@
 using TaskNoter.MVVM.ViewModels;
 using TaskNoter.MVVM.Models;
+using TaskNoter.Data;
+using System.Collections.ObjectModel;
 
 namespace TaskNoter.MVVM.Views;
 
 
 public partial class NewTaskView : ContentPage
 {
-	public NewTaskView()
+    private NewTaskViewModel viewModel;
+
+    private readonly DBService _dbService;
+    private readonly ObservableCollection<MyTask> _tasks;
+    private readonly ObservableCollection<Category> _categories;
+
+    public NewTaskView(DBService dbService, ObservableCollection<MyTask> tasks, ObservableCollection<Category> categories)
 	{
 		InitializeComponent();
+        viewModel = new NewTaskViewModel(dbService, tasks, categories);
+        BindingContext = viewModel;
     }
 
     private async void AddTaskBTN_Clicked(object sender, EventArgs e)
@@ -48,7 +58,17 @@ public partial class NewTaskView : ContentPage
 
         if (!string.IsNullOrEmpty(category))
         {
-            vm.Categories.Add(new Category
+            int newId = viewModel.Categories.Any() ? viewModel.Categories.Max(x => x.Id) + 1 : 1;
+            var newCategory = new Category
+            {
+                Id = newId,
+                Color = Color.FromRgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255)).ToHex(),
+                CategoryName = category,
+            };
+
+            await viewModel.AddCategoryAsync(newCategory);
+        }
+        vm.Categories.Add(new Category
             {
                 Id = vm.Categories.Max(x => x.Id) + 1,
                 Color = Color.FromRgb(

@@ -15,7 +15,6 @@ namespace TaskNoter.MVVM.ViewModels
     {
         private readonly DBService _dbService;
 
-
         public string Task {  get; set; }
         public ObservableCollection<MyTask> Tasks { get; set; } 
         public ObservableCollection<Category> Categories { get; set; }
