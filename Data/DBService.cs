@@ -35,9 +35,9 @@ namespace TaskNoter.Data
         // ================================================================ 
         // ======================== CRUD FOR TASKS ========================
         // ================================================================
-        public async Task<List<DBTaskItems>> GetTask()
+        public async Task<List<MyTask>> GetTask()
         {
-            return await _database.Table<DBTaskItems>().ToListAsync();
+            return await _database.Table<MyTask>().ToListAsync();
         }
 
 

@@ -1,16 +1,19 @@
 using TaskNoter.MVVM.ViewModels;
+using TaskNoter.Data;
+
+
 
 namespace TaskNoter.MVVM.Views;
 
 public partial class MainView : ContentPage
 {
-	private MainViewModel mainViewModel = new MainViewModel();
+    private MainViewModel mainViewModel;
 
-	public MainView()
+	public MainView(DBService dbservice)
 	{
 		InitializeComponent();
-
-		BindingContext = mainViewModel;
+        mainViewModel = new MainViewModel(dbservice);
+        BindingContext = mainViewModel;
 	}
 
     private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -22,13 +25,10 @@ public partial class MainView : ContentPage
     {
         var taskView = new NewTaskView
         {
-            BindingContext = new NewTaskViewModel
-            {
-                Tasks = mainViewModel.Tasks,
-                Categories = mainViewModel.Categories,
-            }
+            BindingContext = new NewTaskViewModel(mainViewModel.DBService, mainViewModel.Tasks, mainViewModel.Categories)
         };
-
         Navigation.PushAsync(taskView);
     }
+
+
 }
